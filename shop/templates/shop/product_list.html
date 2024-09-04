@@ -1,0 +1,38 @@
+{% load static %}
+{% load shop_tags %}
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <title> Товары </title>
+</head>
+<body>
+{% include 'shop/includes/inc_main_menu.html' %}
+{% block content %}
+    <div class="container mt-5">
+        <div class="row row-cols-1 row-cols-md-2 g-4">
+            {% for object in object_list %}
+                <div class="col">
+                    <div class="card">
+                        <img src="{% media_path object.image %}" alt="..." width="150">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ object.name }}</h5>
+                            <p class="card-text">{{ object.description|truncatechars:100 }}</p>
+                        </div>
+                        <div class="btn-group m-3">
+                            <a class="btn btn-primary" href="{% url 'shop:product_detail' object.pk %}">Подробнее</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
+<script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+</body>
+</html>

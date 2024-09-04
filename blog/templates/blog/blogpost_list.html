@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Список постов</title>
+</head>
+<body>
+    <h1>Список постов</h1>
+
+    <a href="{% url 'blog:post_create' %}">Добавить новый пост</a>
+
+    <ul>
+    {% for object in object_list %}
+        <li>
+            <h2>{{ object.title }}</h2>
+            {% if object.preview_image %}
+                <img src="{{ object.preview_image.url }}" alt="{{ object.title }}" style="max-width: 200px;">
+            {% endif %}
+            <p>{{ object.content|truncatewords:20 }}</p>
+            <p>Дата создания: {{ object.created }}</p>
+            <div>
+                <a href="{% url 'blog:post_edit' object.id %}">Редактировать</a>
+                <form action="{% url 'blog:post_delete' object.pk %}" method="post" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit">Удалить</button>
+                </form>
+                <a href="{% url 'blog:post_details' object.pk %}">Подробнее</a>  <!-- Кнопка "Подробнее" -->
+            </div>
+        </li>
+    {% empty %}
+        <li>Нет опубликованных постов.</li>
+    {% endfor %}
+    </ul>
+</body>
+</html>
