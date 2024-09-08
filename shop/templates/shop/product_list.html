@@ -15,7 +15,9 @@
 {% include 'shop/includes/inc_main_menu.html' %}
 {% block content %}
     <div class="container mt-5">
-        <a class="btn btn-outline-primary mb-3" href="{% url 'shop:product_create' %}">Добавить продукт</a>
+        {% if user.is_authenticated %}
+            <a class="btn btn-outline-primary mb-3" href="{% url 'shop:product_create' %}">Добавить продукт</a>
+        {% endif %}
         <div class="row row-cols-1 row-cols-md-2 g-4">
             {% for object in object_list %}
                 <div class="col">
@@ -41,12 +43,14 @@
                         </div>
                         <div class="card-footer">
                             <div class="btn-group m-3">
+                                {% if user.is_authenticated %}
+                                    <a class="btn btn-warning"
+                                       href="{% url 'shop:product_edit' object.pk %}">Редактировать</a>
+                                    <a class="btn btn-danger"
+                                       href="{% url 'shop:product_delete' object.pk %}">Удалить</a>
+                                {% endif %}
                                 <a class="btn btn-primary"
                                    href="{% url 'shop:product_detail' object.pk %}">Подробнее</a>
-                                <a class="btn btn-warning"
-                                   href="{% url 'shop:product_edit' object.pk %}">Редактировать</a>
-                                <a class="btn btn-danger"
-                                   href="{% url 'shop:product_delete' object.pk %}">Удалить</a>
                             </div>
                         </div>
                     </div>

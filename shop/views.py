@@ -1,4 +1,4 @@
-from django.shortcuts import get_object_or_404
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy, reverse
 from django.views.generic import DetailView, TemplateView, CreateView, UpdateView, DeleteView
 from django.views.generic import ListView
@@ -8,6 +8,9 @@ from .models import Product, Version
 
 
 # Create your views here.
+
+class ContactView(TemplateView):
+    template_name = 'shop/contact.html'
 
 
 class ProductListView(ListView):
@@ -21,25 +24,25 @@ class ProductDetailView(DetailView):
     model = Product
 
 
-class ProductDeleteView(DeleteView):
+class ProductDeleteView(LoginRequiredMixin, DeleteView):
     model = Product
     success_url = reverse_lazy('shop:product_list')
 
 
-class ProductUpdateView(UpdateView):
+class ProductUpdateView(LoginRequiredMixin, UpdateView):
+    model = Product
+    form_class = ProductForm
+    success_url = reverse_lazy('shop:product_list')
+
+
+class ProductCreateView(LoginRequiredMixin, CreateView):
     model = Product
     form_class = ProductForm
     success_url = reverse_lazy('shop:product_list')
 
-
-class ContactView(TemplateView):
-    template_name = 'shop/contact.html'
-
-
-class ProductCreateView(CreateView):
-    model = Product
-    form_class = ProductForm
-    success_url = reverse_lazy('shop:product_list')
+    def form_valid(self, form):
+        form.instance.owner = self.request.user
+        return super().form_valid(form)
 
 
 class VersionListView(ListView):

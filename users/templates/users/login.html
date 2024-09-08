@@ -1,0 +1,29 @@
+{% extends 'shop/base.html' %}
+
+{% block content %}
+    <div class="col-12">
+        <div class="text-center center">
+            <form method="post" class="card" novalidate>
+                {% csrf_token %}
+                <div class="card-header">
+                    <h2 class="text-center">Авторизация</h2>
+                </div>
+                <div class="card-body">
+                    <div class="form-error">{{ form.non_field_errors }}</div>
+                    {% for f in form %}
+                        <p><label class="form-label" for="{{ f.id_for_label }}">{{ f.label }}: </label>{{ f }}</p>
+                        <div class="form-error">{{ f.errors }}</div>
+                    {% endfor %}
+                </div>
+                <div class="card-footer">
+                    <button class="btn btn-success" type="submit">Войти</button>
+                    <hr>
+                    <p class="text-center">Восстановить пароль <a href="{% url 'users:password_reset' %}">Восстановить пароль</a></p>
+                    <p class="text-center">Нет аккаунта? <a href="{% url 'users:register' %}">Регистрация</a></p>
+                </div>
+
+
+            </form>
+        </div>
+    </div>
+{% endblock %}
