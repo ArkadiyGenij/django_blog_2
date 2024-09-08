@@ -4,13 +4,24 @@
 {% block content %}
 
     <div class="container text-center">
-        <h1 class="fst-italic"></h1>
-        <img src="{% media_path object.image %}" alt="Картинка" width="250">
-        <p>Название товара: {{ object.name }}</p>
-        <p>Категория: {{ object.category }}</p>
-        <p>Описание: {{ object.description }}</p>
-        <p>Цена: {{ object.price }}Р</p>
-        <p>Дата добавления: {{ object.created_at }}</p>
-        <p>Дата обновления: {{ object.updated_at }}</p>
+        <div class="card">
+            <div class="card-header">
+                <h1 class="fst-italic">{{ object.name }}</h1>
+            </div>
+            <div class="card-body">
+                <img src="{% media_path object.image %}" alt="Картинка" width="250">
+                <p>Категория: {{ object.category }}</p>
+                <p>Описание: {{ object.description }}</p>
+                <p>Цена: {{ object.price }}Р</p>
+                <p>Дата добавления: {{ object.created_at }}</p>
+                <p>Дата обновления: {{ object.updated_at }}</p>
+            </div>
+            <div class="card-footer">
+                <div class="btn-group">
+                    <a href="{% url 'shop:version_list' product.pk %}" class="btn btn-primary">Просмотр версий</a>
+                    <a href="{% url 'shop:product_list' %}" class="btn btn-primary">Вернуться к списку</a>
+                </div>
+            </div>
+        </div>
     </div>
 {% endblock %}

@@ -1,0 +1,10 @@
+{% extends 'shop/base.html' %}
+
+{% block content %}
+<form method="post">
+    {% csrf_token %}
+    <h3> Вы действительно хотите удалить версию {{ object.version_number }}?</h3>
+    <button type="submit" class="btn btn-danger">Подтвердить</button>
+    <a class="btn btn-primary" href="{% url 'shop:version_list' object.product.pk %}">Отменить</a>
+</form>
+{% endblock %}

@@ -15,17 +15,39 @@
 {% include 'shop/includes/inc_main_menu.html' %}
 {% block content %}
     <div class="container mt-5">
+        <a class="btn btn-outline-primary mb-3" href="{% url 'shop:product_create' %}">Добавить продукт</a>
         <div class="row row-cols-1 row-cols-md-2 g-4">
             {% for object in object_list %}
                 <div class="col">
                     <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title">{{ object.name }}</h5>
+                        </div>
                         <img src="{% media_path object.image %}" alt="..." width="150">
                         <div class="card-body">
-                            <h5 class="card-title">{{ object.name }}</h5>
                             <p class="card-text">{{ object.description|truncatechars:100 }}</p>
+                            <h3>Версии:</h3>
+                            <ul>
+                                {% for version in object.versions.all %}
+                                    {% if version.is_current %}
+                                        <li>
+                                            <p>{{ version.version_name }} (Версия: {{ version.version_number }})</p>
+                                        </li>
+                                    {% endif %}
+                                {% empty %}
+                                    <li>Версии отсутствуют</li>
+                                {% endfor %}
+                            </ul>
                         </div>
-                        <div class="btn-group m-3">
-                            <a class="btn btn-primary" href="{% url 'shop:product_detail' object.pk %}">Подробнее</a>
+                        <div class="card-footer">
+                            <div class="btn-group m-3">
+                                <a class="btn btn-primary"
+                                   href="{% url 'shop:product_detail' object.pk %}">Подробнее</a>
+                                <a class="btn btn-warning"
+                                   href="{% url 'shop:product_edit' object.pk %}">Редактировать</a>
+                                <a class="btn btn-danger"
+                                   href="{% url 'shop:product_delete' object.pk %}">Удалить</a>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -1,0 +1,32 @@
+{% extends 'shop/base.html' %}
+
+{% block content %}
+    <a class="btn btn-outline-primary mb-3" href="{% url 'shop:version_create' product.pk %}">Добавить версию</a>
+    <a class="btn btn-outline-primary mb-3" href="{% url 'shop:product_detail' product.pk %}">Вернуться к продукту</a>
+    <table class="table">
+        <thead>
+            <tr>
+                <th> Номер версии </th>
+                <th> Название версии </th>
+                <th> Активна </th>
+                <th> Изменить </th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for version in object_list %}
+            <tr>
+                <td>{{ version.version_number }}</td>
+                <td>{{ version.version_name }}</td>
+                <td>{{ version.is_current }}</td>
+                <td>
+                    <div class="btn-group">
+                        <a class="btn btn-warning" href="{% url 'shop:version_edit' version.pk %}">Изменить</a>
+                        <a class="btn btn-danger" href="{% url 'shop:version_delete' version.pk %}">Удалить</a>
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}
