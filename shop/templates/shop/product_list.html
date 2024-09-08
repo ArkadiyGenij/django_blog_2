@@ -43,7 +43,7 @@
                         </div>
                         <div class="card-footer">
                             <div class="btn-group m-3">
-                                {% if user.is_authenticated %}
+                                {% if object.owner == request.user %}
                                     <a class="btn btn-warning"
                                        href="{% url 'shop:product_edit' object.pk %}">Редактировать</a>
                                     <a class="btn btn-danger"
