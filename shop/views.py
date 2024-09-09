@@ -1,10 +1,12 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse_lazy, reverse
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
 from django.views.generic import DetailView, TemplateView, CreateView, UpdateView, DeleteView
 from django.views.generic import ListView
 
 from shop.forms import ProductForm, VersionForm, ModeratorProductForm
-from .models import Product, Version
+from .models import Product, Version, Category
 
 
 # Create your views here.
@@ -13,6 +15,7 @@ class ContactView(TemplateView):
     template_name = 'shop/contact.html'
 
 
+@method_decorator(cache_page(60 * 15), name='dispatch')
 class ProductListView(LoginRequiredMixin, ListView):
     model = Product
 
@@ -25,6 +28,7 @@ class ProductListView(LoginRequiredMixin, ListView):
         return context
 
 
+@method_decorator(cache_page(60 * 10), name='dispatch')
 class ProductDetailView(DetailView):
     model = Product
 
@@ -100,3 +104,24 @@ class VersionDeleteView(DeleteView):
 
     def get_success_url(self):
         return reverse('shop:version_list', kwargs={'pk': self.object.product.id})
+
+
+class CategoryListView(ListView):
+    model = Category
+
+
+class CategoryCreateView(CreateView):
+    model = Category
+    fields = ['name', 'description']
+    success_url = reverse_lazy('shop:category_list')
+
+
+class CategoryUpdateView(UpdateView):
+    model = Category
+    fields = ['name', 'description']
+    success_url = reverse_lazy('shop:category_list')
+
+
+class CategoryDeleteView(DeleteView):
+    model = Category
+    success_url = reverse_lazy('shop:category_list')

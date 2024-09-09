@@ -11,7 +11,10 @@
                     <a class="nav-link active" aria-current="page" href="{% url 'blog:post_list' %}">Блог</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="{% url 'blog:post_list' %}">Версии</a>
+                    <a class="nav-link active" aria-current="page" href="{% url 'shop:category_list' %}">Категории</a>
+                </li>
+            <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="{% url 'shop:product_list' %}">Продукты</a>
                 </li>
                 {% if user.is_authenticated %}
                     <form action="{% url 'users:logout' %}" method="post">
