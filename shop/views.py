@@ -3,7 +3,7 @@ from django.urls import reverse_lazy, reverse
 from django.views.generic import DetailView, TemplateView, CreateView, UpdateView, DeleteView
 from django.views.generic import ListView
 
-from shop.forms import ProductForm, VersionForm
+from shop.forms import ProductForm, VersionForm, ModeratorProductForm
 from .models import Product, Version
 
 
@@ -13,11 +13,16 @@ class ContactView(TemplateView):
     template_name = 'shop/contact.html'
 
 
-class ProductListView(ListView):
+class ProductListView(LoginRequiredMixin, ListView):
     model = Product
 
     def get_queryset(self):
-        return Product.objects.prefetch_related('versions').all()
+        return Product.objects.prefetch_related('versions').filter(is_published=True)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['is_moderator'] = self.request.user.groups.filter(name='Модераторы').exists()
+        return context
 
 
 class ProductDetailView(DetailView):
@@ -34,9 +39,14 @@ class ProductUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     form_class = ProductForm
     success_url = reverse_lazy('shop:product_list')
 
+    def get_form_class(self):
+        if self.request.user.groups.filter(name='Модераторы').exists():
+            return ModeratorProductForm
+        return ProductForm
+
     def test_func(self):
         product = self.get_object()
-        return self.request.user == product.owner
+        return self.request.user == product.owner or self.request.user.groups.filter(name='Модераторы').exists()
 
 
 class ProductCreateView(LoginRequiredMixin, CreateView):

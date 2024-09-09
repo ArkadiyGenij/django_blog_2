@@ -41,8 +41,35 @@ class ProductForm(StyleFormMixin, forms.ModelForm):
         return cleaned_data
 
 
-class VersionForm(StyleFormMixin, forms.ModelForm):
+class ModeratorProductForm(StyleFormMixin, forms.ModelForm):
+    class Meta:
+        model = Product
+        fields = ('description', 'is_published', 'category')
 
+    def clean_name(self):
+        cleaned_data = self.cleaned_data.get('name')
+
+        forbidden_words = ['казино', 'криптовалюта', 'крипта', 'биржа', 'дешево', 'бесплатно', 'обман', 'полиция',
+                           'радар']
+
+        if any(word in cleaned_data.lower() for word in forbidden_words):
+            raise ValidationError("Имя не должно содержать запрещенные слова: " + ', '.join(forbidden_words))
+
+        return cleaned_data
+
+    def clean_description(self):
+        cleaned_data = self.cleaned_data.get('description')
+
+        forbidden_words = ['казино', 'криптовалюта', 'крипта', 'биржа', 'дешево', 'бесплатно', 'обман', 'полиция',
+                           'радар']
+
+        if any(word in cleaned_data.lower() for word in forbidden_words):
+            raise ValidationError("Описание не должно содержать запрещенные слова: " + ', '.join(forbidden_words))
+
+        return cleaned_data
+
+
+class VersionForm(StyleFormMixin, forms.ModelForm):
     class Meta:
         model = Version
         fields = ('version_number', 'version_name', 'is_current')

@@ -43,9 +43,11 @@
                         </div>
                         <div class="card-footer">
                             <div class="btn-group m-3">
-                                {% if object.owner == request.user %}
+                                {% if object.owner == request.user or is_moderator %}
                                     <a class="btn btn-warning"
                                        href="{% url 'shop:product_edit' object.pk %}">Редактировать</a>
+                                {% endif %}
+                                {% if object.owner == request.user %}
                                     <a class="btn btn-danger"
                                        href="{% url 'shop:product_delete' object.pk %}">Удалить</a>
                                 {% endif %}
