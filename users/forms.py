@@ -28,5 +28,6 @@ class LoginUserForm(StyleFormMixin, AuthenticationForm):
         model = get_user_model()
         fields = ['username', 'password']
 
+
 class PasswordResetForm(StyleFormMixin, forms.Form):
     email = forms.EmailField()

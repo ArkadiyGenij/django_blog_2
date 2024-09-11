@@ -15,7 +15,6 @@ class ContactView(TemplateView):
     template_name = 'shop/contact.html'
 
 
-@method_decorator(cache_page(60 * 15), name='dispatch')
 class ProductListView(LoginRequiredMixin, ListView):
     model = Product
 

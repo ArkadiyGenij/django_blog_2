@@ -14,7 +14,6 @@ from pathlib import Path
 
 import dj_database_url
 from decouple import config
-
 from django.core.cache import cache
 from django.core.cache.backends.redis import RedisCache
 
